@@ -19,6 +19,7 @@ class OnBoard : AppCompatActivity(), GestureDetector.OnGestureListener {
         super.onCreate(savedInstanceState)
         binding = ActivityOnBoardBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        gestureDetector = GestureDetector(this@OnBoard, this@OnBoard)
         queue = LinkedList(listOf(
             OnBoardModel("Анализы", "Экспресс сбор и получение проб", "Пропустить",
                 getDrawable(R.drawable.icon_analizi)!!, getDrawable(R.drawable.point_style_blue)!!,
@@ -87,7 +88,7 @@ class OnBoard : AppCompatActivity(), GestureDetector.OnGestureListener {
         var diffY = e2.y - e1.y
         if(abs(diffX)>abs(diffY)){
             if(abs(diffX)> 100 && abs(velocityX) > 100){
-                if(abs(diffX) < 0){
+                if(diffX < 0){
                     if(queue.size !=0){
                         enterOnBoard(queue.poll())
                     }
