@@ -94,6 +94,7 @@ class OnBoard : AppCompatActivity(), GestureDetector.OnGestureListener {
                 }
             }
         }
+        return true
     }
 
 
