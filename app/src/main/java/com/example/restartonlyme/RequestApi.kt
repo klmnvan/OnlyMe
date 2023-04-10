@@ -7,4 +7,7 @@ import retrofit2.http.POST
 interface RequestApi {
     @POST("/api/sendCode")
     fun sendCode(@Header("email") email: String): Call<String>
+
+    @POST("/api/signin")
+    fun postCode(@Header("email") email: String, @Header("code") code: String): Call<String>
 }
