@@ -1,11 +1,100 @@
 package com.example.restartonlyme
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.GestureDetector
+import android.view.MotionEvent
+import com.example.restartonlyme.databinding.ActivityOnBoardBinding
+import java.lang.Math.abs
+import java.util.LinkedList
+import java.util.Queue
 
-class OnBoard : AppCompatActivity() {
+class OnBoard : AppCompatActivity(), GestureDetector.OnGestureListener {
+    lateinit var binding: ActivityOnBoardBinding
+    lateinit var queue: Queue<OnBoardModel>
+    lateinit var gestureDetector: GestureDetector
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_on_board)
+        binding = ActivityOnBoardBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        queue = LinkedList(listOf(
+            OnBoardModel("Анализы", "Экспресс сбор и получение проб", "Пропустить",
+                getDrawable(R.drawable.icon_analizi)!!, getDrawable(R.drawable.point_style_blue)!!,
+                getDrawable(R.drawable.point_style_stroke)!!,getDrawable(R.drawable.point_style_stroke)!!,),
+            OnBoardModel("Уведомления", "Вы быстро узнаете о результатах", "Пропустить",
+                getDrawable(R.drawable.icon_analizi)!!, getDrawable(R.drawable.point_style_stroke)!!,
+                getDrawable(R.drawable.point_style_blue)!!,getDrawable(R.drawable.point_style_stroke)!!,),
+            OnBoardModel("Мониторинг", "Наши врачи всегда наблюдают за вашими показателями здоровья", "Завершить",
+                getDrawable(R.drawable.icon_analizi)!!, getDrawable(R.drawable.point_style_stroke)!!,
+                getDrawable(R.drawable.point_style_stroke)!!,getDrawable(R.drawable.point_style_blue)!!,),
+        ))
+        enterOnBoard(queue.poll())
+        init()
     }
+
+    fun init(){
+        with(binding){
+            textTopscreen.setOnClickListener(){
+                startActivity(Intent(this@OnBoard, InputRegist::class.java))
+                finish()
+            }
+        }
+    }
+
+    fun enterOnBoard(onBoardModel: OnBoardModel){
+        with(binding){
+            textName.text = onBoardModel.title
+            textDes.text = onBoardModel.title
+            textTopscreen.text = onBoardModel.title
+            picture.setImageDrawable(onBoardModel.image)
+            pointFirst.setImageDrawable(onBoardModel.p1)
+            pointSecond.setImageDrawable(onBoardModel.p2)
+            pointThird.setImageDrawable(onBoardModel.p3)
+        }
+    }
+
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        return if (gestureDetector.onTouchEvent(event!!)){
+            true
+        }
+        else{
+        return super.onTouchEvent(event)
+        }
+    }
+
+    override fun onDown(e: MotionEvent): Boolean {
+        return false
+    }
+
+    override fun onShowPress(e: MotionEvent) {
+    }
+
+    override fun onSingleTapUp(e: MotionEvent): Boolean {
+        return false
+    }
+
+    override fun onScroll(e1: MotionEvent, e2: MotionEvent, distanceX: Float, distanceY: Float): Boolean {
+        return false
+    }
+
+    override fun onLongPress(e: MotionEvent) {
+    }
+
+    override fun onFling(e1: MotionEvent, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
+        var diffX = e2.x - e1.x
+        var diffY = e2.y - e1.y
+        if(abs(diffX)>abs(diffY)){
+            if(abs(diffX)> 100 && abs(velocityX) > 100){
+                if(abs(diffX) < 0){
+                    if(queue.size !=0){
+                        enterOnBoard(queue.poll())
+                    }
+                }
+            }
+        }
+    }
+
+
 }

@@ -15,6 +15,9 @@
         android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
         tools:targetApi="31">
         <activity
+            android:name=".InputRegist"
+            android:exported="false" />
+        <activity
             android:name=".OnBoard"
             android:exported="false" />
         <activity
