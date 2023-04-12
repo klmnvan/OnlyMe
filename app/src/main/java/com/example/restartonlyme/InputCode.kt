@@ -1,6 +1,7 @@
 package com.example.restartonlyme
 
 import android.content.ContentValues
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -17,6 +18,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.awaitResponse
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 
 class InputCode : AppCompatActivity() {
     lateinit var binding: ActivityInputCodeBinding
@@ -32,6 +34,18 @@ class InputCode : AppCompatActivity() {
         email = arguments?.getString("email").toString()
         timer()
         textChanged()
+        var thread: Thread = object : Thread(){
+            override fun run() {
+                try {
+                    TimeUnit.SECONDS.sleep(2)
+                    startActivity(Intent(this@InputCode, Home::class.java))
+
+                }
+                catch (e: InterruptedException){
+                    e.printStackTrace()
+                }
+            }
+        }
     }
 
     fun timer(){
